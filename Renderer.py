@@ -189,8 +189,7 @@ esc - quit
                     try:
                         element.draw(self.screen)
                     except AttributeError:
-                        self.log.info('blit')
-                        self.screen.blit(element.image, (65, 50))
+                        self.screen.blit(element.image, element.rect.topleft)
             except StopIteration:
                 remove.append(name)
         for name in remove:
