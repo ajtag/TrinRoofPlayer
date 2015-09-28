@@ -38,7 +38,6 @@ class Star(Sprite):
         # Create an image of the block, and fill it with a color.
         # This could also be an image loaded from the disk.
         self.rect = pygame.Rect(lamp.x, lamp.y, 1, 1)
-        print(self.rect)
 
         self.color = white
         self.rand_color()
