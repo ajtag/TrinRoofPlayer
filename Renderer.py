@@ -134,12 +134,13 @@ class Player:
 
             if event.type == pygame.MOUSEBUTTONUP and event.button == 1:  # left finish click
                 self.cursor_loc_end = event.pos
-                print(
-                    math.floor(self.cursor_loc_start[0]/self.display_scale),
-                    math.floor(self.cursor_loc_start[1]/self.display_scale),
-                    math.floor((event.pos[0] - self.cursor_loc_start[0])/self.display_scale),
-                    math.floor((event.pos[1] - self.cursor_loc_start[1])/self.display_scale)
-                )
+                print('pygame.Rect({}, {}, {}, {})'.format(
+                        math.floor(min(self.cursor_loc_start[0], self.cursor_loc_end[0])/self.display_scale),
+                        math.floor(min(self.cursor_loc_start[1], self.cursor_loc_end[1])/self.display_scale),
+                        math.floor((max(self.cursor_loc_end[0], self.cursor_loc_start[0]) - min(self.cursor_loc_end[0], self.cursor_loc_start[0]))/self.display_scale),
+                        math.floor((max(self.cursor_loc_start[1], self.cursor_loc_end[1]) - min(self.cursor_loc_start[1], self.cursor_loc_end[1]))/self.display_scale)
+                     )
+             )
 
             if event.type == pygame.MOUSEBUTTONUP and event.button == 3:  # right click
                 self.cursor_loc_start = None
