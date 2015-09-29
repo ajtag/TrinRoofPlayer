@@ -96,7 +96,7 @@ if __name__ == "__main__":
 
     LN2015 = Renderer.Player('objects', MADRIX_X, MADRIX_Y, fps=24, display_scale=8,  args=args)
 
-    LN2015.load_sprite("Sun", RisingSun((66, 70), (66, 35), 10, 24 * 2, 24))
+    LN2015.load_sprite("Sun", RisingSun((66, 78), (66, 51), 8, 24 * 5, 24 * 3))
 
     alive = True
     while alive:
