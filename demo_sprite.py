@@ -28,30 +28,52 @@ def hls_to_rgb(hue, lightness, saturation):
     return [i * 255 for i in colorsys.hls_to_rgb(hue / 360.0, lightness / 100.0, saturation / 100.0)]
 
 
-class Star(Sprite):
-    # TODO: shooting star
+class RisingSun(Sprite):
+    def __init__(self, start, end, size, duration, fade):
+        super().__init__(size * 2, size * 2)
 
-    def __init__(self, lamp):
-        # Call the parent class (Sprite) constructor
-        Sprite.__init__(self, 1, 1)
+        self.start = start
+        self.move_x = end[0] - start[0]
+        self.move_y = end[1] - start[1]
+        self.size = size
+        self.rect = self.image.get_rect()
+        self.duration = duration
+        self.fade = 1.0 / fade
 
-        # Create an image of the block, and fill it with a color.
-        # This could also be an image loaded from the disk.
-        self.rect = pygame.Rect(lamp.x, lamp.y, 1, 1)
+        self.time = 0.0
+        self.alpha = 1.0
+        self.log.debug('initing sun')
+        self.render()
 
-        self.color = white
-        self.rand_color()
-
-        self.lamp = lamp
-
-        self.log.debug('created star at {},{}'.format(lamp.x, lamp.y))
-
-    def rand_color(self):
-        self.color = hls_to_rgb(randint(40, 60), randint(20, 100), randint(80, 100))
+    def render(self):
+        p = pygame.PixelArray(self.image)
+        d2 = self.size * self.size
+        for x in range(p.shape[0]):
+            for y in range(p.shape[1]):
+                dx = self.size - x
+                dy = self.size - y
+                dist = dx * dx + dy * dy
+                if dist < d2:
+                    color = (255, 255 - int(255 * dist / d2), 0)
+                    p[x, y] = color
 
     def update(self):
-        self.rand_color()
-        self.image.set_at((0, 0), self.color)
+        if self.time < 1.0:
+            self.time += 1.0 / self.duration
+            x = self.start[0] + self.time * self.move_x
+            y = self.start[1] + self.time * self.move_y
+            self.rect.center = (x, y)
+        else:
+            self.time = 1.0
+            self.alpha -= self.fade
+            if self.alpha < 0.0:
+                raise StopIteration
+            self.image.set_alpha(255 * self.alpha)
+
+    def draw(self, surface):
+        surface.blit(self.image, self.rect)
+
+
 
 
 if __name__ == "__main__":
@@ -74,7 +96,7 @@ if __name__ == "__main__":
 
     LN2015 = Renderer.Player('objects', MADRIX_X, MADRIX_Y, fps=24, display_scale=8,  args=args)
 
-    LN2015.load_sprite("STARS", Star(Lamp(67, 50)))
+    LN2015.load_sprite("Sun", RisingSun((66, 70), (66, 35), 10, 24 * 2, 24))
 
     alive = True
     while alive:
