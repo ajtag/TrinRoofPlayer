@@ -34,7 +34,7 @@ class Ceiling:
         if filename is not None:
             self.readlamps(filename)
         else:
-            self.lamps = (
+            self.lamps = (Lamp(58, 59), Lamp(65, 65),
     Lamp(18, 47), Lamp(18, 45), Lamp(18, 43), Lamp(19, 44), Lamp(19, 45), Lamp(19, 46), Lamp(20, 47), Lamp(20, 46),
     Lamp(20, 45), Lamp(21, 44), Lamp(21, 45), Lamp(21, 46), Lamp(22, 45), Lamp(22, 43), Lamp(23, 44), Lamp(23, 45),
     Lamp(23, 46), Lamp(24, 47), Lamp(24, 45), Lamp(24, 44), Lamp(25, 44), Lamp(25, 45), Lamp(25, 46), Lamp(26, 45),

@@ -88,8 +88,12 @@ class Player:
                    '-y',  # (optional) overwrite output file if it exists
                    '-r', '{}'.format(self.fps),  # frames per second
                    '-i', os.path.join('images', '{}_%d.bmp'.format(self.title)),
+                   '-s', '{}x{}'.format(x, y),
                    '-an',  # Tells FFMPEG not to expect any audio
-                   '-c:v', 'libx264',
+                    '-c:v', 'libx264',
+                   '-tune', 'animation',
+                   '-movflags', 'disable_chpl',
+                   '-pix_fmt', 'yuv420p',
                    '-s', '{}x{}'.format(x, y),  # size of one frame
                    '{}.mp4'.format(self.title)
                    ]
@@ -229,8 +233,6 @@ esc - quit
                 os.mkdir(savepath)
 
             savefile = os.path.join('images', '{}_{}.bmp'.format(self.title, self.ticks))
-            pygame.image.save(self.display, savefile)
-            savefile = os.path.join('images', '{}_{}.bmp'.format('scaled', self.ticks))
             pygame.image.save(self.screen, savefile)
 
         if self.ticks == self.warp:

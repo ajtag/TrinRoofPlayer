@@ -1,4 +1,6 @@
 X,Y,Universe,Channel,Name
+60,61,2,319,"RGB_light #0yyy"
+64,64,1,3,"RGB_light #0xxx"
 18,47,7,369,"RGB_light #0001"
 18,45,7,366,"RGB_light #0002"
 18,43,7,363,"RGB_light #0003"
