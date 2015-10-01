@@ -229,6 +229,8 @@ esc - quit
                 os.mkdir(savepath)
 
             savefile = os.path.join('images', '{}_{}.bmp'.format(self.title, self.ticks))
+            pygame.image.save(self.display, savefile)
+            savefile = os.path.join('images', '{}_{}.bmp'.format('scaled', self.ticks))
             pygame.image.save(self.screen, savefile)
 
         if self.ticks == self.warp:
