@@ -100,15 +100,6 @@ class Player:
         if not self.save_video:
             return
 
-        command = [ffmpeg_exe,
-                   '-y',  # (optional) overwrite output file if it exists
-                   '-r', '{}'.format(self.fps),  # frames per second
-                   '-i', os.path.join('images', '{}_%d.bmp'.format(self.title)),
-                   '-an',  # Tells FFMPEG not to expect any audio
-                   '-c:v', 'libx264',
-                   '-s', '{}x{}'.format(x, y),  # size of one frame
-                   '{}.mp4'.format(self.title)
-                   ]
         sp.call(command)
 
     def run_trigger(self, trigger):
