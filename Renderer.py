@@ -89,8 +89,6 @@ class Player:
                '-an',  # Tells FFMPEG not to expect any audio
                 '-c:v', 'qtrle',
                '-tune', 'animation',
-               '-movflags', 'disable_chpl',
-               '-pix_fmt', 'yuv420p',
                 '-q', '0',
                '-s', '{}x{}'.format(x, y),  # size of one frame
                '{}.mov'.format(self.title)
