@@ -11,6 +11,10 @@ import math
 pygame.font.init()
 FONT = pygame.font.Font(None, 24)
 
+fps_hack = [None]
+def get_fps():
+    return fps_hack[0]
+
 class Trigger(object):
     """Create a new Group, or run a method on an existing group"""
     def __init__(self, scene, method=None, args=()):
@@ -32,6 +36,7 @@ class Player:
 
     def __init__(self, title, width, height, display_scale=1.0, fps=24, args=()):
         pygame.init()
+        fps_hack[0] = fps
         self.title = title
         self.width = width
         self.height = height
