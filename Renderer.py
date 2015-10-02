@@ -77,8 +77,11 @@ class Player:
     def load_timed_event(self, time, events):
         ticks = int(time * self.fps)
         current_events = self.timed_events.get(ticks, [])
-        for e in events:
-            current_events.append(e)
+        if isinstance(events, Trigger):
+            current_events.append(events)
+        else:
+            for e in events:
+                current_events.append(e)
         self.timed_events[ticks] = current_events
 
     def export_video(self, x, y, ffmpeg_exe='ffmpeg'):
