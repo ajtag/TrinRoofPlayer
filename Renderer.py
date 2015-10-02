@@ -74,7 +74,8 @@ class Player:
     def load_scene(self, scene_name, scene_data):
         self.scene_data[scene_name] = scene_data
 
-    def load_timed_event(self, ticks, events):
+    def load_timed_event(self, time, events):
+        ticks = int(time * self.fps)
         current_events = self.timed_events.get(ticks, [])
         for e in events:
             current_events.append(e)
