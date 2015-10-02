@@ -29,12 +29,8 @@ right_arm = pygame.Rect(77, 39, 51, 12)
 
 Lamp = collections.namedtuple("Lamp", ["x", "y"])
 
-class Ceiling:
-    def __init__(self, filename=None):
-        if filename is not None:
-            self.readlamps(filename)
-        else:
-            self.lamps = (Lamp(58, 59), Lamp(65, 65),
+def hardcoded_lamps():
+    return (Lamp(58, 59), Lamp(65, 65),
     Lamp(18, 47), Lamp(18, 45), Lamp(18, 43), Lamp(19, 44), Lamp(19, 45), Lamp(19, 46), Lamp(20, 47), Lamp(20, 46),
     Lamp(20, 45), Lamp(21, 44), Lamp(21, 45), Lamp(21, 46), Lamp(22, 45), Lamp(22, 43), Lamp(23, 44), Lamp(23, 45),
     Lamp(23, 46), Lamp(24, 47), Lamp(24, 45), Lamp(24, 44), Lamp(25, 44), Lamp(25, 45), Lamp(25, 46), Lamp(26, 45),
@@ -160,6 +156,14 @@ class Ceiling:
     Lamp(66, 37), Lamp(80, 43), Lamp(50, 43), Lamp(51, 43), Lamp(52, 43), Lamp(53, 43), Lamp(50, 44), Lamp(51, 44),
     Lamp(52, 44), Lamp(53, 44), Lamp(42, 49), Lamp(41, 39), Lamp(41, 40), Lamp(41, 41), Lamp(41, 42), Lamp(79, 55)
 )
+
+class Ceiling:
+    def __init__(self, filename=None):
+        if filename is not None:
+            self.readlamps(filename)
+        else:
+            self.lamps = hardcoded_lamps()
+        self.bubbleroof_lamps = list(filter(lambda lamp: bubbleroof.collidepoint(lamp.x, lamp.y), self.lamps))
 
     def readlamps(self, filename):
         # Generate array of lights fixture locations
