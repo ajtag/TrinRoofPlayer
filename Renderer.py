@@ -15,6 +15,7 @@ fps_hack = [None]
 def get_fps():
     return fps_hack[0]
 
+
 class Trigger(object):
     """Create a new Group, or run a method on an existing group"""
     def __init__(self, scene, method=None, args=()):
@@ -65,6 +66,8 @@ class Player:
         self.quick = args.quick
 
         self.scene_data = {}
+        self.scene_layer = {}
+
         self.key_triggers = {}
         self.timed_events = {}
 
@@ -73,11 +76,13 @@ class Player:
     def set_key_triggers(self, key, trig):
         self.key_triggers[key] = trig
 
-    def load_sprite(self,name, sprite):
+    def load_sprite(self,name, layer, sprite):
+        self.scene_layer[scene_name] = layer
         self.objects[name] = sprite
 
-    def load_scene(self, scene_name, scene_data):
+    def load_scene(self, scene_name, layer, scene_data):
         self.scene_data[scene_name] = scene_data
+        self.scene_layer[scene_name] = layer
 
     def load_timed_event(self, time, events):
         ticks = int(time * self.fps)
@@ -197,7 +202,11 @@ esc - quit
 
         draw = (self.ticks >= self.warp) or (self.ticks % self.fps == 0)
         remove = []
-        for name, element in self.objects.items():
+        items = [(k,v) for k,v in self.scene_layer.items() if k in self.objects.keys()]
+
+        items.sort(key=lambda ele: ele[1])
+        for name, layer in items:
+            element = self.objects[name]
             try:
                 element.update()
                 if draw:
