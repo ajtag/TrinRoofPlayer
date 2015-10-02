@@ -87,10 +87,11 @@ class Player:
                '-i', os.path.join('images', '{}_%d.bmp'.format(self.title)),
                '-s', '{}x{}'.format(x, y),
                '-an',  # Tells FFMPEG not to expect any audio
-                '-c:v', 'libx264',
+                '-c:v', 'qtrle',
                '-tune', 'animation',
                '-movflags', 'disable_chpl',
                '-pix_fmt', 'yuv420p',
+                '-q', '0'
                '-s', '{}x{}'.format(x, y),  # size of one frame
                '{}.mp4'.format(self.title)
                ]
