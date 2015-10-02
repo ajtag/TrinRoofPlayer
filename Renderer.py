@@ -93,7 +93,7 @@ class Player:
                '-pix_fmt', 'yuv420p',
                 '-q', '0'
                '-s', '{}x{}'.format(x, y),  # size of one frame
-               '{}.mp4'.format(self.title)
+               '{}.mov'.format(self.title)
                ]
         self.log.info(' '.join(command))
 
