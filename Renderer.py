@@ -164,7 +164,18 @@ class Player:
         offset = (scale - width) // 2
         dest = pygame.PixelArray(self.display)
         src = pygame.PixelArray(self.screen)
-        for lamp in ceiling.lamps:
+
+
+
+        if not(self.lightmask):
+            lamps = []
+            for i in range(self.size[0]):
+                for j in range(self.size[1]):
+                    lamps.append(Lamp(i,j))
+        else:
+            lamps = ceiling.lamps
+
+        for lamp in lamps:
             base_x = lamp.x * scale + offset
             base_y = lamp.y * scale + offset
             for x in range(self.sparse):
