@@ -39,7 +39,7 @@ def clean_images():
 class Player:
     log = logging.getLogger('Player')
 
-    def __init__(self, title, width, height, display_scale=1.0, fps=24, args=()):
+    def __init__(self, title, width, height, display_scale=1, fps=24, args=()):
         pygame.init()
         global _fps
         _fps = fps
@@ -76,6 +76,7 @@ class Player:
         if self.warp != 0 and (self.save_images or self.save_video):
             raise Exception("Can not save when warping")
         self.quick = args.quick
+        self.solid = args.solid
 
         self.scene_data = {}
         self.scene_layer = {}
@@ -151,6 +152,15 @@ class Player:
             except:
                 self.log.error("%s" % (trigger))
                 raise
+
+    def sparse_blit(self):
+        self.display.fill(0)
+        scale = int(self.display_scale)
+        dest = pygame.PixelArray(self.display)
+        dest = dest[scale // 2::scale, scale // 2::scale]
+        src = pygame.PixelArray(self.screen)
+        for lamp in ceiling.lamps:
+            dest[lamp.x, lamp.y] = src[lamp.x, lamp.y]
 
     def run(self):
         for event in pygame.event.get():
@@ -270,9 +280,12 @@ esc - quit
 
 
         if draw:
-            if self.lightmask:
-                pygame.Surface.blit(self.screen, self.mask, (0, 0))
-            pygame.transform.scale(self.screen, self.display.get_size(), self.display)
+            if self.solid:
+                if self.lightmask:
+                    pygame.Surface.blit(self.screen, self.mask, (0, 0))
+                pygame.transform.scale(self.screen, self.display.get_size(), self.display)
+            else:
+                self.sparse_blit()
 
             #  draw a red rect overlay to the display surface by dragging the mouse
             if self.cursor_loc_start is not None:
@@ -285,10 +298,8 @@ esc - quit
                 pygame.draw.rect(self.display, (255, 0, 0), r, 2)
 
             self.display.blit(FONT.render('{:.2f}/{:0} fps'.format(self.clock.get_fps(), self.fps), False, (255, 0, 0), ), (10,10))
-            self.display.blit(FONT.render('{:02d}:{:02d}.{:02d}'.format(
-                    int(1.0*self.ticks/60.0/self.fps),
-                    int((self.ticks/self.fps) % 60),
-                    self.ticks % self.fps
+            self.display.blit(FONT.render('{:03d}'.format(
+                    int(self.ticks/self.fps)
                 ), False, (255, 0, 0),), (10,45))
 
             pygame.display.flip()
