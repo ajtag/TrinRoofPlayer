@@ -76,8 +76,8 @@ class Player:
     def set_key_triggers(self, key, trig):
         self.key_triggers[key] = trig
 
-    def load_sprite(self,name, layer, sprite):
-        self.scene_layer[scene_name] = layer
+    def load_sprite(self, name, layer, sprite):
+        self.scene_layer[name] = layer
         self.objects[name] = sprite
 
     def load_scene(self, scene_name, layer, scene_data):
