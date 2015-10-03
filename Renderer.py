@@ -216,6 +216,9 @@ esc - quit
                         self.screen.blit(element.image, element.rect.topleft)
             except StopIteration:
                 remove.append(name)
+            except:
+                self.log.error('Error while drawing {}'.format(name))
+                raise
         for name in remove:
             del self.objects[name]
 

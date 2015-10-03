@@ -6,6 +6,7 @@ import csv
 
 MADRIX_X = 132
 MADRIX_Y = 70
+MADRIX_SIZE = (MADRIX_X, MADRIX_Y)
 
 white = 255, 255, 255, 0xff
 black = 0, 0, 0, 0xff
