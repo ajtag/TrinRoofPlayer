@@ -18,15 +18,18 @@ transparent = 0xff, 0xff, 0xff, 0xff
 
 bubbleroof = Rect((50, 34), (28, 33))
 island = Rect((0, 41), (12, 7))
+
 left_arm = Rect(16, 37, 37, 14)
 left_outer_arm = Rect((16, 42), (18, 8))
-left_inner_arm = Rect((33, 37), (16, 13))
-top_outer_arm = Rect((61, 1), (0, 18))
-top_inner_arm = Rect((60, 18), (9, 18))
+left_inner_arm = Rect((33, 37), (21, 14))
+
 top_arm = Rect(60, 0, 12, 36)
-right_inner_arm = Rect((77, 40), (21, 12))
-right_outer_arm = Rect((97, 40), (28, 12))
+top_outer_arm = Rect((57, 0), (12, 18))
+top_inner_arm = Rect((60, 18), (9, 18))
+
 right_arm = Rect(77, 39, 51, 12)
+right_inner_arm = Rect((78, 39), (20, 13))
+right_outer_arm = Rect((98, 40), (33, 11))
 
 Lamp = collections.namedtuple("Lamp", ["x", "y"])
 

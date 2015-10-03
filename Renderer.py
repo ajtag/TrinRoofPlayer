@@ -165,8 +165,6 @@ class Player:
         dest = pygame.PixelArray(self.display)
         src = pygame.PixelArray(self.screen)
 
-
-
         if not(self.lightmask):
             lamps = []
             for i in range(self.size[0]):
