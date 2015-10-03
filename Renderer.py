@@ -63,6 +63,8 @@ class Player:
         self.display = pygame.display.set_mode((display_scale * width, display_scale * height))
         self.clock = pygame.time.Clock()
         self.fps = fps
+        self.pause = False
+        self.step = False
         self.objects = {}
         self.ticks = 0
         self.background = black
@@ -195,6 +197,9 @@ class Player:
 F1 - save video on exit
 F2 - view mask
 F3 - toggle fps limiter
+F4 - play/pause
+F5 - step frame
+
 esc - quit
 
 ========================================================
@@ -202,7 +207,12 @@ esc - quit
                     for k,t in self.key_triggers.items():
                         self.log.info('{} -  {}'.format(chr(k), t))
 
+                elif event.key == pygame.K_F4:
+                    self.pause = not(self.pause)
+                    self.log.info('pause video: {}'.format(self.pause))
 
+                elif event.key == pygame.K_F5:
+                    self.step = True
 
                 elif event.key == pygame.K_F1:
                     self.save_video = not self.save_video
@@ -220,37 +230,44 @@ esc - quit
                     self.log.debug('pressed {}'.format(event.key))
                     self.run_trigger(self.key_triggers[event.key])
 
-        self.background = black
-        self.screen.fill(self.background)
 
-        for e in self.timed_events.get(self.ticks, []):
-            self.run_trigger(e)
 
-        draw = (self.ticks >= self.warp) or (self.ticks % self.fps == 0)
-        remove = []
-        items = [(k,v) for k,v in self.scene_layer.items() if k in self.objects.keys()]
 
-        items.sort(key=lambda ele: ele[1])
-        for name, layer in items:
-            element = self.objects[name]
-            try:
-                element.update()
-                if draw:
-                    try:
-                        drawfn = element.draw
-                    except AttributeError:
-                        self.screen.blit(element.image, element.rect.topleft)
-                    else:
-                        drawfn(self.screen)
-            except StopIteration:
-                remove.append(name)
-            except:
-                self.log.error('Error while drawing {}'.format(name))
-                raise
-        for name in remove:
-            del self.objects[name]
+        if not (self.pause) or self.step:
+            self.background = black
+            self.screen.fill(self.background)
+            for e in self.timed_events.get(self.ticks, []):
+                self.run_trigger(e)
 
-        self.ticks += 1
+            draw = (self.ticks >= self.warp) or (self.ticks % self.fps == 0)
+            remove = []
+            items = [(k,v) for k,v in self.scene_layer.items() if k in self.objects.keys()]
+
+            items.sort(key=lambda ele: ele[1])
+            for name, layer in items:
+                element = self.objects[name]
+                try:
+                    element.update()
+                    if draw:
+                        try:
+                            drawfn = element.draw
+                        except AttributeError:
+                            self.screen.blit(element.image, element.rect.topleft)
+                        else:
+                            drawfn(self.screen)
+                except StopIteration:
+                    remove.append(name)
+                except:
+                    self.log.error('Error while drawing {}'.format(name))
+                    raise
+            for name in remove:
+                del self.objects[name]
+            self.step = False
+            self.ticks += 1
+        else:
+            draw = True
+
+
 
         if draw:
             if self.lightmask:
