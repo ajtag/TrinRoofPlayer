@@ -18,7 +18,7 @@ def get_fps():
 
 class Trigger(object):
     """Create a new Group, or run a method on an existing group"""
-    def __init__(self, scene, method=None, args=()):
+    def __init__(self, scene, method=None, *args):
         self.scene = scene
         self.method = method
         self.args = args
