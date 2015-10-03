@@ -269,7 +269,7 @@ esc - quit
 
             self.display.blit(FONT.render('{:.2f}/{:0} fps'.format(self.clock.get_fps(), self.fps), False, (255, 0, 0), ), (10,10))
             self.display.blit(FONT.render('{:03d}'.format(
-                    int((self.ticks/self.fps) % 60)
+                    int(self.ticks/self.fps)
                 ), False, (255, 0, 0),), (10,45))
 
             pygame.display.flip()
