@@ -76,7 +76,9 @@ class Player:
         if self.warp != 0 and (self.save_images or self.save_video):
             raise Exception("Can not save when warping")
         self.quick = args.quick
-        self.solid = args.solid
+        self.sparse = args.sparse
+        if self.sparse > self.display_scale:
+            raise Exception("Pixels bigger than screen")
 
         self.scene_data = {}
         self.scene_layer = {}
@@ -156,11 +158,16 @@ class Player:
     def sparse_blit(self):
         self.display.fill(0)
         scale = int(self.display_scale)
+        width = self.sparse
+        offset = (scale - width) // 2
         dest = pygame.PixelArray(self.display)
-        dest = dest[scale // 2::scale, scale // 2::scale]
         src = pygame.PixelArray(self.screen)
         for lamp in ceiling.lamps:
-            dest[lamp.x, lamp.y] = src[lamp.x, lamp.y]
+            base_x = lamp.x * scale + offset
+            base_y = lamp.y * scale + offset
+            for x in range(self.sparse):
+                for y in range(self.sparse):
+                    dest[base_x + x, base_y + y] = src[lamp.x, lamp.y]
 
     def run(self):
         for event in pygame.event.get():
@@ -280,7 +287,7 @@ esc - quit
 
 
         if draw:
-            if self.solid:
+            if self.sparse == 0:
                 if self.lightmask:
                     pygame.Surface.blit(self.screen, self.mask, (0, 0))
                 pygame.transform.scale(self.screen, self.display.get_size(), self.display)
