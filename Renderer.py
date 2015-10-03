@@ -181,12 +181,12 @@ class Player:
                     return False
 
                 elif event.key == pygame.K_HASH:
-                    if self.log.getEffectiveLevel() == logging.DEBUG:
+                    if logging.getLogger().getEffectiveLevel() == logging.DEBUG:
                         self.log.info('Verbose Output Off')
-                        self.log.setLevel(logging.INFO)
+                        logging.getLogger().setLevel(logging.INFO)
                     else:
                         self.log.info('Verbose Output On')
-                        self.log.setLevel(logging.DEBUG)
+                        logging.getLogger().setLevel(logging.DEBUG)
 
                 elif event.key == pygame.K_SLASH:
                     self.log.info('''
