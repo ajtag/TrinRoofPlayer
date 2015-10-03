@@ -170,13 +170,29 @@ class Player:
                 if event.key == pygame.K_ESCAPE:
                     return False
 
-                elif event.key == pygame.K_QUESTION:
+                elif event.key == pygame.K_HASH:
+                    if self.log.getEffectiveLevel() == logging.DEBUG:
+                        self.log.info('Verbose Output Off')
+                        self.log.setLevel(logging.INFO)
+                    else:
+                        self.log.info('Verbose Output On')
+                        self.log.setLevel(logging.DEBUG)
+
+                elif event.key == pygame.K_SLASH:
                     self.log.info('''
+/  - help
+#  - print key triggers
 F1 - save video on exit
 F2 - view mask
 F3 - toggle fps limiter
 esc - quit
+
+========================================================
 ''')
+                    for k,t in self.key_triggers.items():
+                        self.log.info('{} -  {}'.format(chr(k), t))
+
+
 
                 elif event.key == pygame.K_F1:
                     self.save_video = not self.save_video
