@@ -80,7 +80,7 @@ class Player:
         self.scene_layer[name] = layer
         self.objects[name] = sprite
 
-    def load_scene(self, scene_name, layer, scene_data):
+    def load_scene(self, scene_name, layer, *scene_data):
         self.scene_data[scene_name] = scene_data
         self.scene_layer[scene_name] = layer
 
@@ -122,7 +122,7 @@ class Player:
                 self.log.error("No such scene '%s'" % trigger.scene)
                 return
             try:
-                self.objects[trigger.scene] = d[0](*d[1])
+                self.objects[trigger.scene] = d[0](*d[1:])
             except:
                 self.log.error("Failed to create '%s' %s" % (trigger.scene, d))
                 raise
@@ -131,7 +131,7 @@ class Player:
                 try:
                     o = self.objects[trigger.scene]
                 except KeyError:
-                    self.log.error("Scene '%s' not running")
+                    self.log.error("Scene '%s' not running" % trigger.scene)
                     return
                 getattr(o, trigger.method)(*trigger.args)
             except StopIteration:
