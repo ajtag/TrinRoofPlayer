@@ -75,6 +75,8 @@ class Player:
         self.warp = int(self.fps * args.warp)
         if self.warp >= 0 and (self.save_images or self.save_video):
             raise Exception("Can not save when warping")
+        if self.warp < 0:
+            self.warp = None
         self.quick = args.quick
         self.sparse = args.sparse
         if self.sparse > self.display_scale:
@@ -251,7 +253,7 @@ esc - quit
 
 
         running = not self.pause
-        if self.step or self.ticks < self.warp:
+        if self.step or self.warp is not None:
             running = True
         if running:
             self.background = black
@@ -259,7 +261,7 @@ esc - quit
             for e in self.timed_events.get(self.ticks, []):
                 self.run_trigger(e)
 
-            draw = (self.ticks >= self.warp) or (self.ticks % self.fps == 0)
+            draw = (self.warp is None) or (self.ticks % (2 * self.fps) == 0)
             remove = []
             items = [(k,v) for k,v in self.scene_layer.items() if k in self.objects.keys()]
 
@@ -283,8 +285,9 @@ esc - quit
             for name in remove:
                 del self.objects[name]
 
-            if self.ticks == self.warp:
+            if self.warp is not None and self.ticks == self.warp:
                 self.log.info("Warp finished")
+                self.warp = None
 
             self.step = False
             self.ticks += 1
@@ -328,7 +331,7 @@ esc - quit
             pygame.image.save(self.screen, savefile)
 
         if draw:
-            if self.quick:
+            if self.quick or self.warp is not None:
                 self.clock.tick()
             else:
                 self.clock.tick(self.fps)
