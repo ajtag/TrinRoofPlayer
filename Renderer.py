@@ -268,10 +268,8 @@ esc - quit
                 pygame.draw.rect(self.display, (255, 0, 0), r, 2)
 
             self.display.blit(FONT.render('{:.2f}/{:0} fps'.format(self.clock.get_fps(), self.fps), False, (255, 0, 0), ), (10,10))
-            self.display.blit(FONT.render('{:02d}:{:02d}.{:02d}'.format(
-                    int(1.0*self.ticks/60.0/self.fps),
-                    int((self.ticks/self.fps) % 60),
-                    self.ticks % self.fps
+            self.display.blit(FONT.render('{:03d}'.format(
+                    int((self.ticks/self.fps) % 60)
                 ), False, (255, 0, 0),), (10,45))
 
             pygame.display.flip()
