@@ -272,6 +272,10 @@ esc - quit
             for e in self.timed_events.get(self.ticks, []):
                 self.run_trigger(e)
 
+            if self.warp is not None and self.ticks == self.warp:
+                self.log.info("Warp finished")
+                self.warp = None
+
             draw = (self.warp is None) or (self.ticks % (2 * self.fps) == 0)
             remove = []
             items = [(k,v) for k,v in self.scene_layer.items() if k in self.objects.keys()]
@@ -295,10 +299,6 @@ esc - quit
                     raise
             for name in remove:
                 del self.objects[name]
-
-            if self.warp is not None and self.ticks == self.warp:
-                self.log.info("Warp finished")
-                self.warp = None
 
             self.step = False
             self.ticks += 1
