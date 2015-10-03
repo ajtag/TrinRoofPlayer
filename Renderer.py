@@ -221,9 +221,11 @@ esc - quit
                 element.update()
                 if draw:
                     try:
-                        element.draw(self.screen)
+                        drawfn = element.draw
                     except AttributeError:
                         self.screen.blit(element.image, element.rect.topleft)
+                    else:
+                        drawfn(self.screen)
             except StopIteration:
                 remove.append(name)
             except:
