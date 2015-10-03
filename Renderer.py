@@ -7,14 +7,18 @@ import logging
 from Constants import *
 import os
 import math
+import random
 
 pygame.font.init()
 FONT = pygame.font.Font(None, 24)
 
-fps_hack = [None]
+_fps = None
 def get_fps():
-    return fps_hack[0]
+    return _fps
 
+random_seed = str(random.random())
+def new_random(name):
+    return random.Random(random_seed + name)
 
 class Trigger(object):
     """Create a new Group, or run a method on an existing group"""
@@ -37,7 +41,13 @@ class Player:
 
     def __init__(self, title, width, height, display_scale=1.0, fps=24, args=()):
         pygame.init()
-        fps_hack[0] = fps
+        global _fps
+        _fps = fps
+        try:
+            global random_seed
+            random_seed = args.random_seed
+        except AttributeError:
+            pass
         self.title = title
         self.width = width
         self.height = height
@@ -227,9 +237,11 @@ esc - quit
                 element.update()
                 if draw:
                     try:
-                        element.draw(self.screen)
+                        drawfn = element.draw
                     except AttributeError:
                         self.screen.blit(element.image, element.rect.topleft)
+                    else:
+                        drawfn(self.screen)
             except StopIteration:
                 remove.append(name)
             except:
