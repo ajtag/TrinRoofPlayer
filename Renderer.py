@@ -273,8 +273,6 @@ esc - quit
                     self.run_trigger(self.key_triggers[event.key])
 
 
-
-
         running = not self.pause
         if self.step or self.warp is not None:
             running = True
@@ -283,6 +281,7 @@ esc - quit
             self.screen.fill(self.background)
             for e in self.timed_events.get(self.ticks, []):
                 self.run_trigger(e)
+                self.log.info(('{}.{}'.format(self.ticks/self.fps, self.ticks%self.fps), e))
 
             if self.warp is not None and self.ticks == self.warp:
                 self.log.info("Warp finished")
@@ -316,8 +315,6 @@ esc - quit
             self.ticks += 1
         else:
             draw = True
-
-
 
         if draw:
             if self.sparse == 0:
