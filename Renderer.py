@@ -39,7 +39,7 @@ def clean_images():
 class Player:
     log = logging.getLogger('Player')
 
-    def __init__(self, title, width, height, display_scale=1, fps=24, args=()):
+    def __init__(self, title, width, height, fps=24, args=()):
         pygame.init()
         global _fps
         _fps = fps
@@ -52,7 +52,7 @@ class Player:
         self.width = width
         self.height = height
         self.size = (width, height)
-        self.display_scale = display_scale
+        self.display_scale = args.scale
         self.lightmask = args.mask
         self.mask = pygame.Surface(self.size)
         self.mask.fill(dark_grey)
@@ -60,7 +60,7 @@ class Player:
         for x, y in ceiling.lamps:
             self.mask.set_at((x, y), white)
         self.screen = pygame.Surface(self.size)
-        self.display = pygame.display.set_mode((display_scale * width, display_scale * height))
+        self.display = pygame.display.set_mode((self.display_scale * width, self.display_scale * height))
         self.clock = pygame.time.Clock()
         self.fps = fps
         self.pause = args.pause
