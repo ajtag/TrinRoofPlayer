@@ -31,6 +31,13 @@ right_arm = Rect(77, 39, 51, 12)
 right_inner_arm = Rect((78, 39), (20, 13))
 right_outer_arm = Rect((98, 40), (33, 11))
 
+offscreen = [
+        Rect((0, 0), (62, 39)),
+        Rect((71, 0), (57, 40)),
+        Rect((0, 50), (53, 20)),
+        Rect((80, 52), (52, 18)),
+]
+
 Lamp = collections.namedtuple("Lamp", ["x", "y"])
 
 def hardcoded_lamps():
