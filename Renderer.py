@@ -333,18 +333,17 @@ esc - quit
                     self.ticks/self.fps
                 ), False, (255, 0, 0),), (10,45))
 
+            if running and (self.image_format is not None):
+                savepath = os.path.join('images')
+
+                if not (os.path.isdir(savepath)):
+                    os.mkdir(savepath)
+
+                savefile = os.path.join('images', '{}_{}.{}'.format(self.title, self.ticks, self.image_format))
+                pygame.image.save(self.screen, savefile)
+
             pygame.display.flip()
 
-        if self.image_format is not None:
-            savepath = os.path.join('images')
-
-            if not (os.path.isdir(savepath)):
-                os.mkdir(savepath)
-
-            savefile = os.path.join('images', '{}_{}.{}'.format(self.title, self.ticks, self.image_format))
-            pygame.image.save(self.screen, savefile)
-
-        if draw:
             if self.quick or self.warp is not None:
                 self.clock.tick()
             else:
