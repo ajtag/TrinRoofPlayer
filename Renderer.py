@@ -33,7 +33,10 @@ class Trigger(object):
 
 def clean_images():
     # delete any files saved from previous runs
-    [os.unlink(i) for i in glob.glob(os.path.join('images', '*.bmp'))]
+    for ext in ["bmp", "png"]:
+        path = os.path.join('images', '*.{}'.format(ext))
+        for f in glob.glob(path):
+            os.unlink(f) 
 
 
 class Player:
@@ -68,12 +71,14 @@ class Player:
         self.objects = {}
         self.ticks = 0
         self.background = black
-        self.save_images = args.save_images
+        self.image_format = args.image_format
         self.save_video = args.save_video
         self.cursor_loc_start = None
         self.cursor_loc_end = None
         self.warp = int(self.fps * args.warp)
-        if self.warp >= 0 and (self.save_images or self.save_video):
+        if self.save_video and (self.image_format is None):
+            raise Exception("Video requires images")
+        if self.warp >= 0 and (self.image_format is not None):
             raise Exception("Can not save when warping")
         if self.warp < 0:
             self.warp = None
@@ -115,7 +120,7 @@ class Player:
         command = [ffmpeg_exe,
                '-y',  # (optional) overwrite output file if it exists
                '-r', '{}'.format(self.fps),  # frames per second
-               '-i', os.path.join('images', '{}_%d.bmp'.format(self.title)),
+               '-i', os.path.join('images', '{}_%d.{}'.format(self.title, self.image_format)),
                '-s', '{}x{}'.format(x, y),
                '-an',  # Tells FFMPEG not to expect any audio
                 '-c:v', 'qtrle',
@@ -330,13 +335,13 @@ esc - quit
 
             pygame.display.flip()
 
-        if self.save_images:
+        if self.image_format is not None:
             savepath = os.path.join('images')
 
             if not (os.path.isdir(savepath)):
                 os.mkdir(savepath)
 
-            savefile = os.path.join('images', '{}_{}.bmp'.format(self.title, self.ticks))
+            savefile = os.path.join('images', '{}_{}.{}'.format(self.title, self.ticks, self.image_format))
             pygame.image.save(self.screen, savefile)
 
         if draw:
