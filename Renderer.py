@@ -73,6 +73,7 @@ class Player:
         self.background = black
         self.image_format = args.image_format
         self.save_video = args.save_video
+        self.export_display = args.export_display
         self.cursor_loc_start = None
         self.cursor_loc_end = None
         self.warp = int(self.fps * args.warp)
@@ -95,6 +96,12 @@ class Player:
 
         self.log.info('done init')
 
+    def export_surface(self):
+        if self.export_display:
+            return self.display
+        else:
+            return self.screen
+
     def set_key_triggers(self, key, trig):
         self.key_triggers[key] = trig
 
@@ -116,23 +123,25 @@ class Player:
                 current_events.append(e)
         self.timed_events[ticks] = current_events
 
-    def export_video(self, x, y, ffmpeg_exe='ffmpeg'):
+    def export_video(self, ffmpeg_exe='ffmpeg'):
+        if not self.save_video:
+            return
+
+        size = self.export_surface().get_size()
+        size_str = '{}x{}'.format(size[0], size[1])
         command = [ffmpeg_exe,
                '-y',  # (optional) overwrite output file if it exists
                '-r', '{}'.format(self.fps),  # frames per second
                '-i', os.path.join('images', '{}_%d.{}'.format(self.title, self.image_format)),
-               '-s', '{}x{}'.format(x, y),
+               '-s', size_str,
                '-an',  # Tells FFMPEG not to expect any audio
                 '-c:v', 'qtrle',
                '-tune', 'animation',
                 '-q', '0',
-               '-s', '{}x{}'.format(x, y),  # size of one frame
+               '-s', size_str,  # size of one frame
                '{}.mov'.format(self.title)
                ]
         self.log.info(' '.join(command))
-
-        if not self.save_video:
-            return
 
         sp.call(command)
 
@@ -340,7 +349,7 @@ esc - quit
                     os.mkdir(savepath)
 
                 savefile = os.path.join('images', '{}_{}.{}'.format(self.title, self.ticks, self.image_format))
-                pygame.image.save(self.screen, savefile)
+                pygame.image.save(self.export_surface(), savefile)
 
             pygame.display.flip()
 
