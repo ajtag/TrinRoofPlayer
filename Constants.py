@@ -3,6 +3,7 @@ __author__ = 'ajtag'
 from  pygame import Rect
 import collections
 import csv
+import os.path
 
 MADRIX_X = 132
 MADRIX_Y = 70
@@ -170,6 +171,7 @@ def hardcoded_lamps():
 
 class Ceiling:
     def __init__(self, filename=None):
+        self.lamps = []
         if filename is not None:
             self.readlamps(filename)
         else:
@@ -184,4 +186,4 @@ class Ceiling:
             # Adjusted XY coordinates -1 as Madrix counts from 1
             self.lamps.append(Lamp(int(row['X']) - 1, int(row['Y']) - 1))
 
-ceiling = Ceiling()
+ceiling = Ceiling(os.path.join('Resources', 'pixels_rework.csv'))
