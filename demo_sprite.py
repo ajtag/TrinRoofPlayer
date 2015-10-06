@@ -5,6 +5,7 @@ from Constants import MADRIX_X, MADRIX_Y, white, Lamp
 from random import randint
 
 import pygame
+import math
 
 
 class Sprite(pygame.sprite.Sprite):
@@ -25,7 +26,7 @@ def hls_to_rgb(hue, lightness, saturation):
     :param saturation:  0-100
     :return: list
     """
-    return [i * 255 for i in colorsys.hls_to_rgb(hue / 360.0, lightness / 100.0, saturation / 100.0)]
+    return [int(i * 255) for i in colorsys.hls_to_rgb(hue / 360.0, lightness / 100.0, saturation / 100.0)]
 
 
 class RisingSun(Sprite):
@@ -40,24 +41,30 @@ class RisingSun(Sprite):
         self.duration = duration
         self.fade = 1.0 / fade
 
+        self.ticks = 0
         self.time = 0.0
         self.alpha = 1.0
         self.log.debug('initing sun')
-        self.render()
 
-    def render(self):
+
+    def update(self):
         p = pygame.PixelArray(self.image)
-        d2 = self.size * self.size
+        d2 = self.size
         for x in range(p.shape[0]):
             for y in range(p.shape[1]):
                 dx = self.size - x
                 dy = self.size - y
-                dist = dx * dx + dy * dy
+                dist = math.sqrt(dx * dx + dy * dy)
                 if dist < d2:
-                    color = (255, 255 - int(255 * dist / d2), 0)
-                    p[x, y] = color
+                    color = hls_to_rgb( 10* (self.ticks + dist) % 360, 50, 100)
+                    p[x, y] = self.image.map_rgb(color)
+        del p
 
-    def update(self):
+
+
+
+
+        self.ticks += 1
         if self.time < 1.0:
             self.time += 1.0 / self.duration
             x = self.start[0] + self.time * self.move_x
@@ -81,22 +88,12 @@ if __name__ == "__main__":
     logging.getLogger().setLevel(logging.INFO)
     logging.basicConfig()
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--warp", type=float, default=0.0)
-    parser.add_argument("--no-mask", action="store_false", dest="mask")
-    parser.add_argument("--no_images", action="store_false", dest="save_images")
-    parser.add_argument("--save-video", action="store_true")
-    parser.add_argument("--quick", action="store_true")
-    args = parser.parse_args()
 
-    print(args)
 
-    if args.save_images:
-        Renderer.clean_images()
 
-    LN2015 = Renderer.Player('objects', MADRIX_X, MADRIX_Y, fps=24, display_scale=8,  args=args)
+    LN2015 = Renderer.Player('objects', MADRIX_X, MADRIX_Y, fps=24,  args=args)
 
-    LN2015.load_sprite("Sun", RisingSun((66, 78), (66, 51), 8, 24 * 5, 24 * 3))
+    LN2015.load_sprite("Sun", 50, RisingSun((66, 51), (66, 51), 50, 24 * 50, 24 * 30))
 
     alive = True
     while alive:

@@ -8,11 +8,29 @@ from Constants import *
 import os
 import math
 import random
-
+import argparse
 pygame.font.init()
 FONT = pygame.font.Font(None, 24)
 
 _fps = None
+
+def cmd_line_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--warp", type=float, default=-1.0)
+    parser.add_argument("--no-mask", action="store_false", dest="mask")
+    parser.add_argument("--image-format", default="png")
+    parser.add_argument("--no-images", action="store_const", dest="image_format", const=None)
+    parser.add_argument("--save-video", action="store_true")
+    parser.add_argument("--quick", action="store_true")
+    parser.add_argument("--avconv", action="store_true")
+    parser.add_argument("--random-seed", type=str, default="LN2015")
+    parser.add_argument("--sparse", type=int, default=2)
+    parser.add_argument("--solid", dest='sparse', action="store_const", const=0)
+    parser.add_argument("--pause", action="store_true")
+    parser.add_argument("--scale", type=int, default=8)
+    parser.add_argument("--export-display", action="store_true")
+    return parser.parse_args()
+
 def get_fps():
     return _fps
 
