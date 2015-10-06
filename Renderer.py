@@ -9,6 +9,8 @@ import os
 import math
 import random
 import argparse
+
+
 pygame.font.init()
 FONT = pygame.font.Font(None, 24)
 

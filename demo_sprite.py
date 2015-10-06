@@ -88,7 +88,7 @@ if __name__ == "__main__":
     logging.getLogger().setLevel(logging.INFO)
     logging.basicConfig()
 
-
+    args = Renderer.cmd_line_args()
 
 
     LN2015 = Renderer.Player('objects', MADRIX_X, MADRIX_Y, fps=24,  args=args)
