@@ -143,13 +143,18 @@ class Player:
                 current_events.append(e)
         self.timed_events[ticks] = current_events
 
-    def export_video(self, ffmpeg_exe='ffmpeg'):
+    def export_video(self, ffmpeg_exe='ffmpeg', video_length=None):
         if not self.save_video:
             return
 
+
+
         size = self.export_surface().get_size()
         size_str = '{}x{}'.format(size[0], size[1])
-        command = [ffmpeg_exe,
+        command = [ffmpeg_exe,]
+        if video_length is not None:
+            command.extend(['-t', '{}'.format(video_length)])
+        command.extend([
                '-y',  # (optional) overwrite output file if it exists
                '-r', '{}'.format(self.fps),  # frames per second
                '-i', os.path.join('images', '{}_%d.{}'.format(self.title, self.image_format)),
@@ -161,6 +166,10 @@ class Player:
                '-s', size_str,  # size of one frame
                '{}.mov'.format(self.title)
                ]
+        )
+
+
+
         self.log.info(' '.join(command))
 
         sp.call(command)
