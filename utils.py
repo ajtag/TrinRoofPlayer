@@ -1,6 +1,7 @@
 __author__ = 'ajtag'
 
 import colorsys
+import math
 
 def hls_to_rgb(hue, lightness, saturation):
     """
@@ -10,6 +11,10 @@ def hls_to_rgb(hue, lightness, saturation):
     :return: list(int)
     """
     return [int(i * 255) for i in colorsys.hls_to_rgb(hue / 360.0, lightness / 100.0, saturation / 100.0)]
+
+
+def pythagoras(vector):
+    return math.sqrt(vector[0] * vector[0] + vector[1] * vector[1])
 
 
 def hlsa_to_rgba(hue, lightness, saturation, alpha):

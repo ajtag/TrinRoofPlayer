@@ -1,0 +1,1 @@
+ffmpeg -y -s 1366x768 -f x11grab -r 24  -i :0.0 -vcodec qtrle -preset animation -q 0 -s 170x96 -threads 0 output2.mov
