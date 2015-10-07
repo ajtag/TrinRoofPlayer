@@ -60,10 +60,6 @@ class RisingSun(Sprite):
                     p[x, y] = self.image.map_rgb(color)
         del p
 
-
-
-
-
         self.ticks += 1
         if self.time < 1.0:
             self.time += 1.0 / self.duration
@@ -84,7 +80,7 @@ class RisingSun(Sprite):
 
 
 if __name__ == "__main__":
-    import sys, argparse, platform, colorsys
+    import sys, platform, colorsys
     logging.getLogger().setLevel(logging.INFO)
     logging.basicConfig()
 
