@@ -37,8 +37,30 @@ def get_fps():
     return _fps
 
 random_seed = str(random.random())
+random_sum = 0.0
+num_random = 0
+random_dead = False
+class HashedRandom(random.Random):
+    def __init__(self, *args, **kwargs):
+        global num_random
+        self.myseed = args[0]
+        num_random += 1
+        super().__init__(*args, **kwargs)
+
+    def __del__(self):
+        global num_random
+        global random_sum
+        if random_dead:
+            print("UnRandom %s" % self.myseed)
+        num_random -= 1
+        random_sum += self.random()
+        try:
+            super().__del__()
+        except:
+            pass
+
 def new_random(name):
-    return random.Random(random_seed + name)
+    return HashedRandom(random_seed + name)
 
 class Trigger(object):
     """Create a new Group, or run a method on an existing group"""
@@ -388,4 +410,10 @@ esc - quit
 
 
     def end(self):
+        global random_dead
         pygame.quit()
+        del self.objects
+        random_dead = True
+        if num_random != 0:
+            print("WARNING: %d objects still live" % num_random)
+        print("RNG: %g" % (random_sum))
