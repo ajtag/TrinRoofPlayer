@@ -36,7 +36,7 @@ class Whizz():
     def draw(self, s):
         s.blit(self.image, (0, 0))
 
-    def update(self):
+    def move_threads(self):
         self.ticks += 1
         if len(self.threads) < self.threadcount:
             if self.threadrate > 0:
@@ -59,10 +59,28 @@ class Whizz():
                 self.threads.append(t)
 
 
+    def update(self):
+        self.move_threads()
+
+
         self.image.fill((0, 0, 0, 0))
         px = pygame.PixelArray(self.image)
 
         new_threads = []
+
+    def draw_by_pixel(self):
+        px = pygame.PixelArray(self.image)
+        for lamp in ceiling.lamps:
+        #for i in range(MADRIX_X):
+        #    for j in range(MADRIX_Y):
+
+                p = Vector2(lamp)
+
+                if p.distance_to()
+
+        del px
+
+    def draw_by_thread(self):
         for threadi in self.threads:
 
             # update location
