@@ -43,23 +43,21 @@ class Plasma(Sprite):
 
     def update(self):
 
-        fade_in = 5
-        fade_out = 5
-        # fade in
+        fade_in = get_fps() * 5
+        fade_out = get_fps() * 5
 
-        seconds = self.ticks /get_fps()
+
+        seconds = self.ticks / get_fps()
 
         wof = self.wormhole
 
-        if seconds == 36:
-            raise StopIteration
-        elif seconds >= 5 and seconds < 27:
+        if self.ticks > (get_fps() * 5) and self.ticks < (get_fps() * 27) + 9:
+            log.info('wot')
             self.alpha = 255
-            self.wormhole_offset.rotate_ip(7)
+            self.wormhole_offset.rotate_ip(7 / 3)
             self.wofticks += 1
-            wof = self.wormhole + (self.wormhole_offset * (20 * sin(self.wofticks * 2*pi/360)))
+            wof = self.wormhole + (self.wormhole_offset * (20 * sin(self.wofticks * 2 * pi / 360 / 3)))
         elif seconds > 15:
-
             wub = sin(self.wubticks)
             self.wubticks += 1
 
@@ -68,36 +66,33 @@ class Plasma(Sprite):
         # update wormhole location
         # we are going to make a spiral for Tamaki's second birthday today!... happy birthday
 
+        if self.ticks < fade_in:
+            log.info(self.alpha)
+            self.alpha = min(255, self.alpha + round(255.0 / (get_fps() * 5)))
 
         p = pygame.PixelArray(self.image)
         for l in self.lamps:
             l = Vector2(l.x, l.y)
-            d = (wof).distance_to(l)
+            d = wof.distance_to(l)
 
-            if seconds < 5:
-                self.alpha = min(255, self.alpha + round(255 / (get_fps() * 5)))
+            hue = 10 * (self.ticks + d + (8 * (sin(self.wubticks / 3.0)))) % 360
 
-
-            hue = 10 * (self.ticks + d + (8 * (sin(self.wubticks/3.0)))) % 360
-
-            if seconds < 31:
+            if self.ticks < (get_fps() * 31) + 9:
                 color = hlsa_to_rgba(hue, 50, 100, self.alpha)
             else:
-
-                t = self.fade_ticks / get_fps()/5* 0.512
-                y = (128 * sin( hue * 2*pi/360 )) + 384 - t
-                color = hlsa_to_rgba(10 * (self.ticks + d + (8 * (sin(self.wubticks/3.0)))) % 360, 50, 100, max(0, min(255, y)))
-                self.fade_ticks += 1
-
+                t = self.fade_ticks / 5 * 12
+                y = (128 * sin(hue * 2 * pi / 360)) + 384 - t
+                color = hlsa_to_rgba(10 * (self.ticks + d + (8 * (sin(self.wubticks / 3.0)))) % 360, 50, 100, max(0, min(255, y)))
 
             p[int(l.x), int(l.y)] = self.image.map_rgb(color)
         del p
         self.ticks += 1
+        if self.ticks >= (get_fps() * 31) + 9:
+            self.fade_ticks += 1
+
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
-
-
 
 
 if __name__ == "__main__":
@@ -106,18 +101,9 @@ if __name__ == "__main__":
     logging.basicConfig()
 
     args = Renderer.cmd_line_args()
-
-    Triggers = [
-        (5, Trigger('Sun', 'Move', (66, 53), 10, 10 ))
-    ]
-
-
-    LN2015 = Renderer.Player('objects', MADRIX_X, MADRIX_Y, fps=24,  args=args)
-
+    LN2015 = Renderer.Player('plasma', MADRIX_X, MADRIX_Y, fps=24,  args=args)
 
     LN2015.load_sprite("Plasma", 50, Plasma((65, 51)))
-    for time, trig in Triggers:
-        LN2015.load_timed_event(time, trig)
 
     alive = True
     while alive:
@@ -128,7 +114,7 @@ if __name__ == "__main__":
         else:
             ffmpeg_exe = 'ffmpeg'
 
-    LN2015.export_video(ffmpeg_exe, 46)
+    LN2015.export_video(ffmpeg_exe, '00:00:42.9')
     LN2015.end()
 sys.exit()
  

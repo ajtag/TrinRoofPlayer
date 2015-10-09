@@ -59,7 +59,7 @@ if __name__ == "__main__":
 
     args = Renderer.cmd_line_args()
 
-    LN2015 = Renderer.Player('objects', MADRIX_X, MADRIX_Y, fps=24, args=args)
+    LN2015 = Renderer.Player('lamps', MADRIX_X, MADRIX_Y, fps=24, args=args)
 
     LN2015.load_sprite("Lamps", 50, Lamps())
 
@@ -72,7 +72,7 @@ if __name__ == "__main__":
         else:
             ffmpeg_exe = 'ffmpeg'
 
-    LN2015.export_video(ffmpeg_exe, 12)
+    LN2015.export_video(ffmpeg_exe)
     LN2015.end()
 sys.exit()
 

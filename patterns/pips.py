@@ -78,7 +78,7 @@ if __name__ == "__main__":
 
     args = Renderer.cmd_line_args()
 
-    LN2015 = Renderer.Player('objects', MADRIX_X, MADRIX_Y, fps=24, args=args)
+    LN2015 = Renderer.Player('pips', MADRIX_X, MADRIX_Y, fps=24, args=args)
 
     LN2015.load_sprite("Pips", 50, Pips())
 
