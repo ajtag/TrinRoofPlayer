@@ -58,4 +58,4 @@ class Ceiling:
         self.bubbleroof_lamps = list(filter(lambda lamp: bubbleroof.collidepoint(lamp.x, lamp.y), spawn_lamps))
 
 
-ceiling = Ceiling(os.path.join('Resources', 'pixels_mapped.csv'))
+ceiling = Ceiling(spawn_filename=os.path.join('Resources', 'pixels_rework.csv'), render_filename=os.path.join('Resources', 'pixels_mapped.csv'))
